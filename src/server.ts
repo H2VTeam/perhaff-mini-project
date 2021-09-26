@@ -1,5 +1,5 @@
 import app from './app';
-import connectDB from './utils/db';
+import connectDB from './config/db';
 // 0) HANDLE UNCAUGHT EXCEPTION
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');

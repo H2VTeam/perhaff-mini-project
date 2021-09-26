@@ -14,6 +14,10 @@ module.exports = {
     'no-console': 0,
     'import/prefer-default-export': 'off',
     'consistent-return': 'off',
+    'arrow-body-style': 'off',
+    'no-unused-vars': ['warn'],
+    'no-underscore-dangle': 'off',
+    camelcase: 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
