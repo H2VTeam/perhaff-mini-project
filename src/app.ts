@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 
 // Import Routes
-import { viewRouter } from './routes';
+import { viewRouter, studentRouter, courseRouter } from './routes';
 
 // Config env
 dotenv.config();
@@ -30,6 +30,8 @@ app.use(cors());
 
 // 2. ROUTES
 app.use('/', viewRouter);
+app.use('/student', studentRouter);
+app.use('/course', courseRouter);
 
 // Check Unhandled Routes
 app.all('*', (req: Request, res: Response) => {
