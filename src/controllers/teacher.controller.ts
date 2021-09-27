@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import Teacher from '../models/teacher.schema';
-interface T extends Document {}
+
 const teacherController = {
   createTeacher: async (req: Request, res: Response) => {
     try {
-      const data = req.body as T;
+      const { teacherId, ...data } = req.body;
+      const teacher = await Teacher.findOne({ teacher_id: teacherId });
+      if (!teacher)
+        return res.status(400).json({ msg: 'Teacher already exist.' });
       return res.json({
         msg: 'Create success!',
-        teacher: await Teacher.create(data),
+        teacher: await Teacher.create({ ...data, teacher_id: teacherId }),
       });
     } catch (err: any) {
       return res.status(500).json({ msg: err.message });
@@ -32,14 +35,58 @@ const teacherController = {
           },
         });
       } else {
-        return res.status(500).json({ msg: 'Can not get students.' });
+        return res.status(500).json({ msg: 'Can not get teachers.' });
       }
     } catch (err: any) {
       return res.status(500).json({ msg: err.message });
     }
   },
-  getAllTeacherById:async (req: Request, res: Response) => {
-   
-  }
+  getAllTeacherById: async (req: Request, res: Response) => {
+    try {
+      const { teacherId } = req.params;
+      const teacher = Teacher.findById({ teacher_id: teacherId });
+
+      if (!teacher)
+        return res.status(404).json({ msg: 'Teacher does not exist.' });
+
+      return res.json(teacher);
+    } catch (err: any) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  removeTeacher: async (req: Request, res: Response) => {
+    try {
+      const { teacherId } = req.params;
+      const teacher = Teacher.findOneAndDelete({ teacher_id: teacherId });
+      if (!teacher)
+        return res.status(400).json({ msg: 'Teacher can not delete' });
+
+      return res.status(200).json({ msg: 'Delete Success' });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  updateTeacher: async (req: Request, res: Response) => { // update res object properties === object schema properties
+    try {
+      const data = req.body;
+
+      let teacher = await Teacher.findById({
+        teacher_id: req.params.teacherId,
+      });
+      if (!teacher)
+        return res.status(400).json({ msg: 'Teacher can not update' });
+
+      Object.assign(teacher, data);
+
+      teacher = await teacher.save();
+
+      return res.status(200).json({
+        msg: 'Update success!',
+        teacher: data,
+      });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 };
 export default teacherController;

@@ -4,6 +4,12 @@ import { validateEmail } from '../utils/validation';
 
 
 const teacherSchema = new mongoose.Schema({
+  teacher_id: {
+    type: String,
+    required: [true, 'Please add your email or phone'],
+    trim: true,
+    unique: true,
+  },
   name: {
     type: String,
     required: [true, 'Please Add Name Teacher'],
