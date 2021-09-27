@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 
 // Import Routes
-import { viewRouter, studentRouter, courseRouter, userRouter } from './routes';
+import { viewRouter, studentRouter, courseRouter, userRouter ,teacherRouter} from './routes';
 
 // Config env
 dotenv.config();
@@ -33,7 +33,7 @@ app.use('/', viewRouter);
 app.use('/student', studentRouter);
 app.use('/course', courseRouter);
 app.use('/user', userRouter);
-
+app.use('/teacher',teacherRouter)
 // Check Unhandled Routes
 app.all('*', (req: Request, res: Response) => {
   res.status(404).send(`Can't find ${req.originalUrl} on this server!`);
