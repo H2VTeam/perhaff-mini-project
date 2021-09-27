@@ -15,7 +15,7 @@ const teacherController = {
   },
   getAllTeachers: async (req: Request, res: Response) => {
     try {
-      const { limit, offset } = req.query;
+      const { limit, offset } = req.query; // pagination
       if (limit && offset) {
         let teachers = [];
         let total: number = 0;
@@ -38,5 +38,8 @@ const teacherController = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  getAllTeacherById:async (req: Request, res: Response) => {
+   
+  }
 };
 export default teacherController;
