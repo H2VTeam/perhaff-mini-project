@@ -23,12 +23,6 @@ const teacherSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  role: {
-    type: String,
-    required: [true, 'Please Add Role'],
-    trim: true,
-    unique: true,
-  },
   class_ids: [
     {
       type: mongoose.Schema.Types.ObjectId,

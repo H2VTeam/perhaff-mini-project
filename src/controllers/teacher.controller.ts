@@ -1,6 +1,18 @@
 import { Request, Response } from 'express';
 import Teacher from '../models/teacher.schema';
+interface T extends Document {}
 const teacherController = {
+  createTeacher: async (req: Request, res: Response) => {
+    try {
+      const data = req.body as T;
+      return res.json({
+        msg: 'Create success!',
+        teacher: await Teacher.create(data),
+      });
+    } catch (err: any) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
   getAllTeachers: async (req: Request, res: Response) => {
     try {
       const { limit, offset } = req.query;
