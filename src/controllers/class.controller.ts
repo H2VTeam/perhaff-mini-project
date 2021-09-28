@@ -3,19 +3,14 @@ import Class from '../models/class.schema';
 
 const classController = {
   createClass: async (req: Request, res: Response) => {
+    // create res object properties === object schema properties
     try {
-      const { classId, courseId, teacherId, studentIds, ...data } = req.body;
-      const _class = await Class.findOne({ class_id: classId });
+      const data = req.body;
+      const _class = await Class.findOne({ class_id: data.class_id });
       if (!_class) return res.status(400).json({ msg: 'Class already exist.' });
       return res.json({
         msg: 'Create success!',
-        class: await Class.create({
-          ...data,
-          class_id: classId,
-          course_id: courseId,
-          teacher_id: teacherId,
-          student_ids: studentIds,
-        }),
+        class: await Class.create(data),
       });
     } catch (err: any) {
       return res.status(500).json({ msg: err.message });
@@ -70,7 +65,8 @@ const classController = {
       return res.status(500).json({ msg: err.message });
     }
   },
-  updateClass: async (req: Request, res: Response) => { // update res object properties === object schema properties
+  updateClass: async (req: Request, res: Response) => {
+    // update res object properties === object schema properties
     try {
       const data = req.body;
 

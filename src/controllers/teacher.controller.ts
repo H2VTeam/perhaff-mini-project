@@ -2,15 +2,15 @@ import { Request, Response } from 'express';
 import Teacher from '../models/teacher.schema';
 
 const teacherController = {
-  createTeacher: async (req: Request, res: Response) => {
+  createTeacher: async (req: Request, res: Response) => {  // create res object properties === object schema properties
     try {
-      const { teacherId, ...data } = req.body;
-      const teacher = await Teacher.findOne({ teacher_id: teacherId });
+      const data = req.body;
+      const teacher = await Teacher.findOne({ teacher_id: data.teacher_id });
       if (!teacher)
         return res.status(400).json({ msg: 'Teacher already exist.' });
       return res.json({
         msg: 'Create success!',
-        teacher: await Teacher.create({ ...data, teacher_id: teacherId }),
+        teacher: await Teacher.create(data),
       });
     } catch (err: any) {
       return res.status(500).json({ msg: err.message });
