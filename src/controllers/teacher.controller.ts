@@ -6,7 +6,7 @@ const teacherController = {
     try {
       const data = req.body;
       const teacher = await Teacher.findOne({ teacher_id: data.teacher_id });
-      if (!teacher)
+      if (teacher)
         return res.status(400).json({ msg: 'Teacher already exist.' });
       return res.json({
         msg: 'Create success!',

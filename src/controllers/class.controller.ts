@@ -7,7 +7,7 @@ const classController = {
     try {
       const data = req.body;
       const _class = await Class.findOne({ class_id: data.class_id });
-      if (!_class) return res.status(400).json({ msg: 'Class already exist.' });
+      if (_class) return res.status(400).json({ msg: 'Class already exist.' });
       return res.json({
         msg: 'Create success!',
         class: await Class.create(data),
