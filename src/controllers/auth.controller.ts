@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { IDecodedToken, IUser, IUserRequest } from '../config/interfaces';
 import Student from '../models/student.schema';
+import Teacher from '../models/teacher.schema';
 import User from '../models/user.schema';
 import { UserRole } from '../utils/constants';
 import {
@@ -35,14 +36,22 @@ export const checkRole = (
   next: NextFunction
 ) => {
   try {
-    const { studentId } = req.params;
+    const { studentId, teacherId } = req.params;
     const { user } = req;
 
     if (
+      // Student
       !(
         studentId &&
         user.role === UserRole.STUDENT &&
         user.account === studentId
+      ) &&
+      user.role !== UserRole.ADMIN &&
+      // Teacher
+      !(
+        teacherId &&
+        user.role === UserRole.TEACHER &&
+        user.account === teacherId
       ) &&
       user.role !== UserRole.ADMIN
     ) {
@@ -89,13 +98,19 @@ export const authController = {
           break;
         }
         case UserRole.TEACHER: {
+          const teacher = await Teacher.findOne({ teacher_id: account });
+          if (!teacher) {
+            return res.status(400).json({
+              msg: 'Account must be a teacher id or teacher does not exist!',
+            });
+          }
           break;
         }
         default: {
           // Role Admin
           return res
             .status(400)
-            .json({ msg: 'You cannot create an admin account' });
+            .json({ msg: 'You cannot create an admin account or wrong type!' });
         }
       }
 
@@ -108,8 +123,8 @@ export const authController = {
         name,
         account,
         password: passwordHash,
+        type,
       });
-      console.log('OK');
 
       const accessToken = generateAccessToken({ id: newUser._id });
 

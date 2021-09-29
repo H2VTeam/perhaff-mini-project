@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import Teacher from '../models/teacher.schema';
 
 const teacherController = {
-  createTeacher: async (req: Request, res: Response) => {  // create res object properties === object schema properties
+  createTeacher: async (req: Request, res: Response) => {
+    // create res object properties === object schema properties
     try {
       const data = req.body;
       const teacher = await Teacher.findOne({ teacher_id: data.teacher_id });
@@ -41,10 +42,10 @@ const teacherController = {
       return res.status(500).json({ msg: err.message });
     }
   },
-  getAllTeacherById: async (req: Request, res: Response) => {
+  getTeacherById: async (req: Request, res: Response) => {
     try {
       const { teacherId } = req.params;
-      const teacher = Teacher.findById({ teacher_id: teacherId });
+      const teacher = await Teacher.findOne({ teacher_id: teacherId });
 
       if (!teacher)
         return res.status(404).json({ msg: 'Teacher does not exist.' });
@@ -57,7 +58,7 @@ const teacherController = {
   removeTeacher: async (req: Request, res: Response) => {
     try {
       const { teacherId } = req.params;
-      const teacher = Teacher.findOneAndDelete({ teacher_id: teacherId });
+      const teacher = await Teacher.findOneAndDelete({ teacher_id: teacherId });
       if (!teacher)
         return res.status(400).json({ msg: 'Teacher can not delete' });
 
@@ -66,11 +67,12 @@ const teacherController = {
       return res.status(500).json({ msg: err.message });
     }
   },
-  updateTeacher: async (req: Request, res: Response) => { // update res object properties === object schema properties
+  updateTeacher: async (req: Request, res: Response) => {
+    // update res object properties === object schema properties
     try {
       const data = req.body;
 
-      let teacher = await Teacher.findById({
+      let teacher = await Teacher.findOne({
         teacher_id: req.params.teacherId,
       });
       if (!teacher)

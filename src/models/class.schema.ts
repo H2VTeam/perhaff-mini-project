@@ -22,7 +22,6 @@ const classSchema = new mongoose.Schema(
     teacher_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Teacher',
-      default: '',
     },
     student_ids: [
       {

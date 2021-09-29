@@ -1,6 +1,10 @@
 import express from 'express';
 import { teacherController } from '../controllers';
-import { authController, checkRole, restrictTo } from '../controllers/auth.controller';
+import {
+  authController,
+  checkRole,
+  restrictTo,
+} from '../controllers/auth.controller';
 
 import { UserRole } from '../utils/constants';
 
@@ -12,13 +16,11 @@ router.get('/', teacherController.getAllTeachers);
 
 router
   .route('/:teacherId')
-  .get(checkRole, teacherController.getAllTeacherById)
+  .get(checkRole, teacherController.getTeacherById)
   .patch(checkRole, teacherController.updateTeacher);
 
-router.use(restrictTo([UserRole.ADMIN, UserRole.TEACHER]));
-router.get('/', teacherController.getAllTeachers);
-
 router.use(restrictTo([UserRole.ADMIN]));
+router.get('/', teacherController.getAllTeachers);
 router.post('/', teacherController.createTeacher);
 router.route('/:teacherId').delete(teacherController.removeTeacher);
 
