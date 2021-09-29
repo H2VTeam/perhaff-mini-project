@@ -123,7 +123,7 @@ export const authController = {
         name,
         account,
         password: passwordHash,
-        type,
+        role: type,
       });
 
       const accessToken = generateAccessToken({ id: newUser._id });
